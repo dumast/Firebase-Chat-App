@@ -13,7 +13,7 @@ export default function FriendList() {
     useEffect(() => {
         async function init() {
             const friends = await getFriends(user!.uid);
-            setFriends(await getFriends(user!.uid));
+            setFriends(friends.sort());
         }
         init();
     }, []);

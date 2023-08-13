@@ -1,10 +1,12 @@
-'use client'
+'use client';
 
-import { AuthContext, useAuthContext } from "@/context/AuthContext"
-import firebase_app from "@/firebase/config"
-import createMessage from "@/firebase/messages/create"
-import { DocumentData, QueryDocumentSnapshot, Timestamp, collection, doc, getDocs, getFirestore, limit, onSnapshot, query, where } from "firebase/firestore"
-import { useState, useEffect, FormEvent, useMemo } from "react"
+import { AuthContext, useAuthContext } from "@/context/AuthContext";
+import firebase_app from "@/firebase/config";
+import { Friend, getUserData } from "@/firebase/friends";
+import createMessage from "@/firebase/messages/create";
+import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, query, where } from "firebase/firestore";
+import { useState, useEffect, FormEvent, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 const db = getFirestore(firebase_app)
 
@@ -16,12 +18,15 @@ export interface Message {
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-    const { user }: AuthContext = useAuthContext();
+    const router = useRouter();
+
+    const { user, dbUser }: AuthContext = useAuthContext();
 
     const [newMessage, setNewMessage] = useState<string>("");
     const [messages, setMessages] = useState<Message[]>([])
+    const [friendData, setFriendData] = useState<Friend>({ id: "", displayName: "" });
 
-    const conversationDocumentId: string = useMemo(() => [params.slug, user!.uid].sort().join("-"), []);
+    const conversationDocumentId: string = useMemo(() => [params.slug, user?.uid].sort().join("-"), []);
 
     async function handleForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -33,6 +38,17 @@ export default function Page({ params }: { params: { slug: string } }) {
         return message.type === 'text' || message.type === 'image';
     }
 
+
+    useEffect(() => {
+        if (user === null || dbUser === null || !dbUser?.friends?.includes(params.slug)) return router.push("/");
+        async function init() {
+            const friend = await getUserData(params.slug);
+            if (friend === null) return;
+            if (!friend.friends.includes(user!.uid)) return router.push("/")
+            setFriendData({ id: friend.id, displayName: friend.displayName || friend.username });
+        }
+        init();
+    }, [])
 
     useEffect(() => {
         const messagesQuery = query(collection(db, `conversations/${conversationDocumentId}/messages`), limit(100));
@@ -53,7 +69,11 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div>
             {messages.map((message: Message, index: number) => {
                 return (
-                    <div key={index}>{message.content}</div>
+                    <div key={index}>
+                        {message.author === params.slug && <p>{friendData?.displayName}</p>}
+                        {message.author === user!.uid && <p>{dbUser?.displayName || dbUser?.username}</p>}
+                        <p>{message.content}</p>
+                    </div>
                 )
             })}
             <form onSubmit={handleForm}>

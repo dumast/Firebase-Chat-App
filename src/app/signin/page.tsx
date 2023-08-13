@@ -38,10 +38,10 @@ function Page() {
                 default:
                     setMessage("Unknown Error");
             }
-            return
+            return;
         }
 
-        return router.push("/")
+        return router.push("/");
     }
 
     useEffect(() => {

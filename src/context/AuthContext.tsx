@@ -7,7 +7,6 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
 import firebase_app from '@/firebase/config';
-import SignIn from "@/app/signin/page";
 
 const auth = getAuth(firebase_app);
 const db = getFirestore(firebase_app)
@@ -22,7 +21,9 @@ export interface DbUser {
     displayName: string | null,
     username: string,
     email: string,
-    friends?: string[]
+    friends?: string[],
+    friendRequests?: string[],
+    sentFriendRequests?: string[],
 }
 
 export const AuthContext = createContext<AuthContext>({ user: null, dbUser: null });
@@ -50,9 +51,10 @@ export const AuthContextProvider = ({
                     const dbUserData = dbUserDoc.data();
                     if (dbUserData != null) {
                         setDbUser({
-                            displayName: dbUserData.displayName ? dbUserData.displayName : null,
+                            displayName: dbUserData.displayName || null,
                             username: dbUserData.username,
-                            email: dbUserData.email
+                            email: dbUserData.email,
+                            friends: dbUserData.friends
                         })
                     }
                 }

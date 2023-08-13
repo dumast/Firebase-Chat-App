@@ -5,7 +5,7 @@ import type { AuthContext } from '@/context/AuthContext';
 import styles from './page.module.css';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import FriendList from '@/components/friendList';
+import FriendList from '@/components/conversationsList';
 
 export default function Home() {
 

@@ -16,8 +16,9 @@ export default function NavBar() {
         <nav>
             <p>{dbUser.displayName ? dbUser.displayName : dbUser.username}</p>
             <ul>
-                <li><Link href=""></Link></li>
-                <a onClick={() => { signOut(); router.push("/")}}>Sign Out</a>
+                <li><Link href="/">Dashboard</Link></li>
+                <li><Link href="/friends">Friends</Link></li>
+                <a onClick={() => { signOut(); router.push("/") }}>Sign Out</a>
             </ul>
         </nav>
     </header>)
