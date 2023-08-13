@@ -5,7 +5,7 @@ import firebase_app from "@/firebase/config";
 import { Friend, getUserData } from "@/firebase/friends";
 import createMessage from "@/firebase/messages/create";
 import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, query, where } from "firebase/firestore";
-import { useState, useEffect, FormEvent, useMemo } from "react";
+import React, { useState, useEffect, FormEvent, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 const db = getFirestore(firebase_app)

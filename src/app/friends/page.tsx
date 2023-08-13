@@ -2,7 +2,7 @@
 
 import { AuthContext, useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { getFriends, getFriendRequests, getSentFriendRequests, sendFriendRequest, acceptFriendRequest, removeFriend, removeSentFriendRequest } from "@/firebase/friends";
 import type { Friend, Res } from "@/firebase/friends";
 

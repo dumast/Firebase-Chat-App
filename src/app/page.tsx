@@ -3,7 +3,7 @@
 import { useAuthContext } from '@/context/AuthContext';
 import type { AuthContext } from '@/context/AuthContext';
 import styles from './page.module.css';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import FriendList from '@/components/conversationsList';
 
