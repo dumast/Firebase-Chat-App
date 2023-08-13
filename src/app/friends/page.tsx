@@ -6,7 +6,7 @@ import React, { useState, useEffect, FormEvent } from "react";
 import { getFriends, getFriendRequests, getSentFriendRequests, sendFriendRequest, acceptFriendRequest, removeFriend, removeSentFriendRequest } from "@/firebase/friends";
 import type { Friend, Res } from "@/firebase/friends";
 
-export default function page() {
+export default function Page() {
     const router = useRouter();
 
     const { user, dbUser }: AuthContext = useAuthContext();
