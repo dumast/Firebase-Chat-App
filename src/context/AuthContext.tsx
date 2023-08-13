@@ -40,6 +40,7 @@ export const AuthContextProvider = ({
 
     useEffect(() => {
         return onIdTokenChanged(auth, async (user: User | null) => {
+            setLoading(true);
             if (!user) {
                 setUser(null);
                 nookies.set(undefined, 'token', '', { path: '/' });

@@ -19,6 +19,11 @@ export default function Home() {
     }
   }, [])
 
+  if (user === null || dbUser === null) {
+    return (
+      <div>Please sign in</div>
+    )
+  }
   return (
     <main className={styles.main}>
       <FriendList />
