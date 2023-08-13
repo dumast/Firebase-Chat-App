@@ -17,7 +17,7 @@ export default function Home() {
     if (user === null || dbUser === null) {
       router.push("/signin");
     }
-  }, [])
+  }, [user])
 
   if (user === null || dbUser === null) {
     return (
