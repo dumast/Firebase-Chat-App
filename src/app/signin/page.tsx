@@ -33,10 +33,13 @@ function Page() {
                 case "auth/user-not-found":
                 case "auth/wrong-password":
                     setMessage("email and password don't match");
+                    break;
                 case "auth/too-many-requests":
                     setMessage("Too many requests. Try again later");
+                    break;
                 default:
                     setMessage("Unknown Error");
+                    break;
             }
             return;
         }

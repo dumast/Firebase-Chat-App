@@ -63,6 +63,7 @@ function Page() {
             switch (error.code) {
                 case "auth/email-already-in-use":
                     setMessage("Email already in use")
+                    break;
             }
             return;
         }
