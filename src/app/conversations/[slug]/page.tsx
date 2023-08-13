@@ -11,7 +11,8 @@ const db = getFirestore(firebase_app)
 export interface Message {
     type: 'text' | 'image',
     content: string,
-    timestamp: string
+    author: string,
+    timestamp: string,
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
@@ -24,7 +25,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     async function handleForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const { result, error } = await createMessage(newMessage, conversationDocumentId);
+        const { result, error } = await createMessage(newMessage, conversationDocumentId, user!.uid);
         setNewMessage("");
     }
 
@@ -58,7 +59,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             <form onSubmit={handleForm}>
                 <label htmlFor="message">
                     <p>Message</p>
-                    <input onChange={(e) => setNewMessage(e.target.value)} value={newMessage}/>
+                    <input onChange={(e) => setNewMessage(e.target.value)} value={newMessage} />
                 </label>
                 <button type="submit">Send</button>
             </form>
