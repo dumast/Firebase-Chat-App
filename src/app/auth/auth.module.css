@@ -16,24 +16,6 @@
     padding: 40px;
 }
 
-/* .authBox::before {
-    pointer-events: none;
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 25px;
-    padding: 2px;
-    background:
-        linear-gradient(217deg, rgb(237, 98, 98), rgba(255, 0, 0, 0) 70.71%),
-        linear-gradient(127deg, rgb(170, 40, 40), rgba(0, 255, 0, 0) 70.71%),
-        linear-gradient(336deg, rgb(216, 95, 95), rgba(0, 0, 255, 0) 70.71%);
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-} */
-
 .title {
     font-size: 50px;
     color: white;
