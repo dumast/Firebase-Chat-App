@@ -5,7 +5,7 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 const db = getFirestore(firebase_app)
 
 export default async function createMessage(content: string, conversationDocumentId: string, userId: string) {
-    const date = new Date().getTime().toString()
+    const date = parseInt(new Date().getTime().toString());
 
     let result = null,
         error = null;
@@ -17,7 +17,7 @@ export default async function createMessage(content: string, conversationDocumen
             author: userId
         }
 
-        result = await setDoc(doc(db, `conversations/${conversationDocumentId}/messages`, date), newMessage, {
+        result = await setDoc(doc(db, `conversations/${conversationDocumentId}/messages`, date.toString()), newMessage, {
             merge: true,
         });
     } catch (e) {

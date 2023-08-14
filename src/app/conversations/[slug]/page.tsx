@@ -4,9 +4,10 @@ import { AuthContext, useAuthContext } from "@/context/AuthContext";
 import firebase_app from "@/firebase/config";
 import { Friend, getUserData } from "@/firebase/friends";
 import createMessage from "@/firebase/messages/create";
-import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, query, where } from "firebase/firestore";
-import React, { useState, useEffect, FormEvent, useMemo } from "react";
+import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import React, { useState, useEffect, FormEvent, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
+import styles from './conversations.module.css'
 
 const db = getFirestore(firebase_app)
 
@@ -14,7 +15,7 @@ export interface Message {
     type: 'text' | 'image',
     content: string,
     author: string,
-    timestamp: string,
+    timestamp: number,
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
@@ -51,7 +52,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     }, [])
 
     useEffect(() => {
-        const messagesQuery = query(collection(db, `conversations/${conversationDocumentId}/messages`), limit(100));
+        const messagesQuery = query(collection(db, `conversations/${conversationDocumentId}/messages`), orderBy("timestamp", "asc"), limit(100));
         onSnapshot(messagesQuery, (doc) => {
             let tmpMessages: Message[] = [];
             if (doc.docs.length == 0) return;
@@ -65,23 +66,32 @@ export default function Page({ params }: { params: { slug: string } }) {
         });
     }, [])
 
+    const messagesEndRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [messages])
+
     return (
-        <div>
-            {messages.map((message: Message, index: number) => {
-                return (
-                    <div key={index}>
-                        {message.author === params.slug && <p>{friendData?.displayName}</p>}
-                        {message.author === user!.uid && <p>{dbUser?.displayName || dbUser?.username}</p>}
-                        <p>{message.content}</p>
-                    </div>
-                )
-            })}
-            <form onSubmit={handleForm}>
+        <div className={styles.container}>
+            <div className={styles.chatbox}>
+                {messages.map((message: Message, index: number) => {
+                    return (
+                        <div key={index}>
+                            {message.author === params.slug && <p>{friendData?.displayName}</p>}
+                            {message.author === user!.uid && <p>{dbUser?.displayName || dbUser?.username}</p>}
+                            <p>{message.content}</p>
+                        </div>
+                    )
+                })}
+                <div ref={messagesEndRef} />
+            </div>
+            <form className={styles.textbar} onSubmit={handleForm}>
                 <label htmlFor="message">
                     <p>Message</p>
-                    <input onChange={(e) => setNewMessage(e.target.value)} value={newMessage} />
+                    <input className={styles.textbarInput} placeholder={`Message ${friendData.displayName}`} onChange={(e) => setNewMessage(e.target.value)} value={newMessage} />
                 </label>
-                <button type="submit">Send</button>
+                <button hidden type="submit" disabled={newMessage === ""}>Send</button>
             </form>
         </div>
     )
