@@ -91,13 +91,13 @@ function Page() {
                     <label htmlFor="pasword">PASSWORD
                         <button type="button" onClick={() => setShowPassword((value) => !value)} className={styles.passwordToggle}>{showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</button>
                     </label>
-                    <input onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required type={showPassword ? "text" : "password"} name="password" id="password" />
+                    <input onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required type={showPassword ? "text" : "password"} name="password" id="password" placeholder="password" />
                 </div>
                 <div className={styles.inputBar}>
                     <label htmlFor="confirmPassword">CONFIRM PASSWORD
                         <button type="button" onClick={() => setShowConfirmPassword((value) => !value)} className={styles.passwordToggle}>{showConfirmPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</button>
                     </label>
-                    <input onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" required type={showConfirmPassword ? "text" : "password"} name="confirmPassword" id="confirmPassword" />
+                    <input onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" required type={showConfirmPassword ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder="confirm password" />
                 </div>
                 <div className={styles.message}>
                     {message != "" && <p>{message}</p>}
