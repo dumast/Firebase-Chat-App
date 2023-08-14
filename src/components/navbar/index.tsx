@@ -1,10 +1,12 @@
-import { AuthContext, useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import signOut from "@/firebase/auth/signout";
 import { useRouter } from 'next/navigation';
 
+import type { _AuthContext } from "@/utils/types";
+
 export default function NavBar() {
-    const { user, dbUser }: AuthContext = useAuthContext();
+    const { user, dbUser }: _AuthContext = useAuthContext();
 
     const router = useRouter();
 

@@ -1,29 +1,30 @@
 'use client';
 
-import { AuthContext, useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect, FormEvent } from "react";
 import { getFriends, getFriendRequests, getSentFriendRequests, sendFriendRequest, acceptFriendRequest, removeFriend, removeSentFriendRequest } from "@/firebase/friends";
-import type { Friend, Res } from "@/firebase/friends";
+
+import type { _AuthContext, _Friend, _Res } from "@/utils/types";
 
 export default function Page() {
     const router = useRouter();
 
-    const { user, dbUser }: AuthContext = useAuthContext();
+    const { user, dbUser }: _AuthContext = useAuthContext();
 
     const [newFriendUserName, setNewFriendUserName] = useState<string>("");
     const [friendRequestMessage, setFriendRequestMessage] = useState<string>("");
     const [acceptFriendMessage, setAcceptFriendMessage] = useState<string>("");
-    const [friends, setFriends] = useState<Friend[]>([]);
-    const [friendRequests, setFriendRequests] = useState<Friend[]>([]);
-    const [sentFriendRequests, setSentFriendRequests] = useState<Friend[]>([]);
+    const [friends, setFriends] = useState<_Friend[]>([]);
+    const [friendRequests, setFriendRequests] = useState<_Friend[]>([]);
+    const [sentFriendRequests, setSentFriendRequests] = useState<_Friend[]>([]);
 
-    async function handleRemoveFriend(friendDelete: Friend) {
+    async function handleRemoveFriend(friendDelete: _Friend) {
         await removeFriend(user!.uid, friendDelete.id);
         setFriends(friends.filter((friend) => friend.id !== friendDelete.id));
     };
 
-    async function handleRemoveSentFriendRequest(friendDelete: Friend) {
+    async function handleRemoveSentFriendRequest(friendDelete: _Friend) {
         await removeSentFriendRequest(user!.uid, friendDelete.id);
         setSentFriendRequests(sentFriendRequests.filter((sentFriendRequest) => sentFriendRequest.id !== friendDelete.id));
     }
@@ -31,7 +32,7 @@ export default function Page() {
     async function handleSendFriendRequest(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (newFriendUserName === "") return setFriendRequestMessage("Please enter a valid username")
-        const res: Res = await sendFriendRequest(user!.uid, newFriendUserName)
+        const res: _Res = await sendFriendRequest(user!.uid, newFriendUserName)
         switch (res.status) {
             case 200:
                 setSentFriendRequests([...sentFriendRequests, { id: res.content!.id, displayName: newFriendUserName }].sort());
@@ -46,8 +47,8 @@ export default function Page() {
         setNewFriendUserName("");
     };
 
-    async function handleAcceptFriendRequest(friend: Friend) {
-        const res: Res = await acceptFriendRequest(user!.uid, friend.id);
+    async function handleAcceptFriendRequest(friend: _Friend) {
+        const res: _Res = await acceptFriendRequest(user!.uid, friend.id);
         switch (res.status) {
             case 200:
                 setFriendRequests(friendRequests.filter((friendRequest) => friendRequest.id !== friend.id));
@@ -95,7 +96,7 @@ export default function Page() {
                 <button type="submit" disabled={newFriendUserName === ""}>Send Friend Request</button>
             </form>
             <h2>Friend Requests</h2>
-            {friendRequests.map((friend: Friend, index: number) => {
+            {friendRequests.map((friend: _Friend, index: number) => {
                 return (
                     <div key={index}>
                         <p>{friend.displayName}</p>
@@ -105,7 +106,7 @@ export default function Page() {
             })}
             {acceptFriendMessage}
             <h2>Sent Friend Requests</h2>
-            {sentFriendRequests.map((friend: Friend, index: number) => {
+            {sentFriendRequests.map((friend: _Friend, index: number) => {
                 return (
                     <div key={index}>
                         <p>{friend.displayName}</p>
@@ -114,7 +115,7 @@ export default function Page() {
                 )
             })}
             <h2>Manage Friends</h2>
-            {friends.map((friend: Friend, index: number) => {
+            {friends.map((friend: _Friend, index: number) => {
                 console.log("FRIENDS: ", friend)
                 return (
                     <div key={index}>

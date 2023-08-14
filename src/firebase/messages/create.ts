@@ -1,6 +1,7 @@
-import { Message } from "@/app/conversations/[slug]/page";
 import firebase_app from "../config";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+import type{ _Message } from "@/utils/types";
 
 const db = getFirestore(firebase_app)
 
@@ -10,7 +11,7 @@ export default async function createMessage(content: string, conversationDocumen
     let result = null,
         error = null;
     try {
-        const newMessage: Message = {
+        const newMessage: _Message = {
             type: 'text',
             content: content,
             timestamp: date,

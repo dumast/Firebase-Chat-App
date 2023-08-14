@@ -5,28 +5,15 @@ import {
     getAuth,
     onIdTokenChanged,
 } from 'firebase/auth';
-import { doc, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebase_app from '@/firebase/config';
+
+import type { _AuthContext, _DbUser } from '@/utils/types';
 
 const auth = getAuth(firebase_app);
 const db = getFirestore(firebase_app)
 
-
-export interface AuthContext {
-    user: User | null,
-    dbUser: DbUser | null,
-}
-
-export interface DbUser {
-    displayName: string | null,
-    username: string,
-    email: string,
-    friends?: string[],
-    friendRequests?: string[],
-    sentFriendRequests?: string[],
-}
-
-export const AuthContext = createContext<AuthContext>({ user: null, dbUser: null });
+export const AuthContext = createContext<_AuthContext>({ user: null, dbUser: null });
 
 export const useAuthContext = () => useContext(AuthContext);
 
@@ -36,7 +23,7 @@ export const AuthContextProvider = ({
     const [loading, setLoading] = useState<boolean>(true);
 
     const [user, setUser] = useState<User | null>(null);
-    const [dbUser, setDbUser] = useState<DbUser | null>(null);
+    const [dbUser, setDbUser] = useState<_DbUser | null>(null);
 
     useEffect(() => {
         return onIdTokenChanged(auth, async (user: User | null) => {

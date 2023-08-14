@@ -1,18 +1,10 @@
-import { DocumentData, QueryDocumentSnapshot, QuerySnapshot, arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import firebase_app from "../config";
+import { authMessages, friendsMessages, globalMessages } from "@/utils/messages";
+
+import type { _Res, _Friend } from "@/utils/types";
 
 const db = getFirestore(firebase_app)
-
-export interface Res {
-    status: number,
-    message: string,
-    content?: Friend
-}
-
-export interface Friend {
-    id: string,
-    displayName: string
-}
 
 async function userId(username: string): Promise<string | null> {
     try {
@@ -35,12 +27,12 @@ export async function getUserData(id: string) {
     }
 }
 
-async function getFriendData(uid: string, data: string): Promise<Friend[]> {
+async function getFriendData(uid: string, data: string): Promise<_Friend[]> {
     try {
         const userData = await getUserData(uid);
         if (userData == null) return []
         if (userData[data] === undefined) return [];
-        let friends: Friend[] = [];
+        let friends: _Friend[] = [];
         for (let i = 0; i < userData[data].length; i++) {
             let friendDisplayName: string;
             const friendData = await getUserData(userData[data][i]);
@@ -58,26 +50,26 @@ async function getFriendData(uid: string, data: string): Promise<Friend[]> {
     }
 }
 
-export async function getFriends(uid: string): Promise<Friend[]> {
+export async function getFriends(uid: string): Promise<_Friend[]> {
     return getFriendData(uid, 'friends');
 }
 
-export async function getFriendRequests(uid: string): Promise<Friend[]> {
+export async function getFriendRequests(uid: string): Promise<_Friend[]> {
     return getFriendData(uid, 'friendRequests');
 }
 
-export async function getSentFriendRequests(uid: string): Promise<Friend[]> {
+export async function getSentFriendRequests(uid: string): Promise<_Friend[]> {
     return getFriendData(uid, 'sentFriendRequests');
 }
 
-export async function sendFriendRequest(uid: string, friendUserName: string): Promise<Res> {
-    let res: Res;
+export async function sendFriendRequest(uid: string, friendUserName: string): Promise<_Res> {
+    let res: _Res;
     try {
         const friendId = await userId(friendUserName);
         if (friendId === null) {
             res = {
                 status: 404,
-                message: "User not found"
+                message: friendsMessages.userNotFound
             }
             return res;
         }
@@ -85,28 +77,28 @@ export async function sendFriendRequest(uid: string, friendUserName: string): Pr
         if (userData === null) {
             res = {
                 status: 401,
-                message: "User not logged in"
+                message: authMessages.userNotLoggedIn
             }
             return res;
         }
         if (uid === friendId) {
             res = {
                 status: 403,
-                message: "You can't add yourself as a friend"
+                message: friendsMessages.selfAdd
             }
             return res;
         }
         if (userData.friends !== undefined && userData.friends.includes(friendId)) {
             res = {
                 status: 400,
-                message: "User is already a friend"
+                message: friendsMessages.userAlreadyFriend
             }
             return res;
         }
         if (userData.sentFriendRequests !== undefined && userData.sentFriendRequests.includes(friendId)) {
             res = {
                 status: 400,
-                message: "This request has already been sent"
+                message: friendsMessages.friendRequestAlreadySent
             }
             return res;
         }
@@ -114,7 +106,7 @@ export async function sendFriendRequest(uid: string, friendUserName: string): Pr
             await acceptFriendRequest(uid, friendId);
             res = {
                 status: 206,
-                message: "Friend request accepted",
+                message: friendsMessages.friendRequestAccepted,
                 content: {
                     id: friendId,
                     displayName: friendUserName
@@ -130,7 +122,7 @@ export async function sendFriendRequest(uid: string, friendUserName: string): Pr
         })
         res = {
             status: 200,
-            message: "Friend request sent",
+            message: friendsMessages.friendRequestSent,
             content: {
                 id: friendId,
                 displayName: friendUserName
@@ -140,27 +132,27 @@ export async function sendFriendRequest(uid: string, friendUserName: string): Pr
     } catch (e) {
         res = {
             status: 500,
-            message: "Unknown error"
+            message: globalMessages.unknownError
         }
         return res;
     }
 }
 
-export async function acceptFriendRequest(uid: string, friendId: string): Promise<Res> {
-    let res: Res;
+export async function acceptFriendRequest(uid: string, friendId: string): Promise<_Res> {
+    let res: _Res;
     try {
         const friendData = await getUserData(friendId);
         if (friendData === null) {
             res = {
                 status: 404,
-                message: "User not found"
+                message: friendsMessages.userNotFound
             }
             return res
         }
         if (!friendData.sentFriendRequests.includes(uid)) {
             res = {
                 status: 403,
-                message: "Friend request doesn't exist"
+                message: friendsMessages.friendRequestRetrieved
             }
             return res
         }
@@ -174,13 +166,13 @@ export async function acceptFriendRequest(uid: string, friendId: string): Promis
         })
         res = {
             status: 200,
-            message: "Friend request accepted"
+            message: friendsMessages.friendRequestAccepted
         }
         return res;
     } catch (e) {
         res = {
             status: 500,
-            message: "Unknown error"
+            message: globalMessages.unknownError
         }
         return res;
     }

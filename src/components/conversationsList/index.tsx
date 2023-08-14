@@ -1,14 +1,16 @@
 'use client';
 
-import { AuthContext, useAuthContext } from "@/context/AuthContext";
-import { getFriends, Friend } from "@/firebase/friends";
+import { useAuthContext } from "@/context/AuthContext";
+import { getFriends } from "@/firebase/friends";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function FriendList() {
-    const { user, dbUser }: AuthContext = useAuthContext();
+import type { _AuthContext, _Friend } from "@/utils/types";
 
-    const [friends, setFriends] = useState<Friend[]>([]);
+export default function FriendList() {
+    const { user, dbUser }: _AuthContext = useAuthContext();
+
+    const [friends, setFriends] = useState<_Friend[]>([]);
 
     useEffect(() => {
         async function init() {
@@ -19,7 +21,7 @@ export default function FriendList() {
     }, []);
 
     return (<div>
-        {friends.map((friend: Friend, index: number) => {
+        {friends.map((friend: _Friend, index: number) => {
             return (
                 <div key={index}><Link href={`/conversations/${friend.id}`}>{friend.displayName}</Link></div>
             )

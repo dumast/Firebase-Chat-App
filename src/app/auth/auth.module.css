@@ -1,0 +1,134 @@
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+}
+
+.authBox {
+    background-color: rgba(110, 3, 3, 0.199);
+    filter: blur(10);
+    position: relative;
+    border: 3px solid rgb(70, 4, 4, 0.80);
+    border-radius: 25px;
+    width: clamp(250px, 90vw, 700px);
+    padding: 40px;
+}
+
+/* .authBox::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 25px;
+    padding: 2px;
+    background:
+        linear-gradient(217deg, rgb(237, 98, 98), rgba(255, 0, 0, 0) 70.71%),
+        linear-gradient(127deg, rgb(170, 40, 40), rgba(0, 255, 0, 0) 70.71%),
+        linear-gradient(336deg, rgb(216, 95, 95), rgba(0, 0, 255, 0) 70.71%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+} */
+
+.title {
+    font-size: 50px;
+    color: white;
+    text-align: center;
+}
+
+.form {
+    width: 100%;
+}
+
+.inputBar,
+.submitButton {
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+.inputBar {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputBar label {
+    color: white;
+    font-weight: bold;
+    padding-bottom: 1px;
+}
+
+.inputBar input {
+    outline: none;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: large;
+    border: solid 1px rgba(70, 4, 4, 0.80);
+    background-color: rgba(70, 4, 4, 0.80);
+    color: white;
+    transition: 100ms;
+}
+
+.inputBar input:-webkit-autofill {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+.inputBar input:focus {
+    border: solid 1px white
+}
+
+.inputBar .passwordToggle {
+    display: inline-block;
+    border: none;
+    outline: none;
+    margin-left: 4px;
+    width: 30px;
+    height: 20px;
+    background: none;
+    color: white;
+}
+
+.inputBar .passwordToggle svg {
+    height: 15px;
+}
+
+.message {
+    color: white;
+}
+
+.submitButton button {
+    outline: none;
+    border: solid 1px rgba(52, 4, 4, 0.8);
+    width: 100%;
+    margin-top: 20px;
+    background-color: rgba(52, 4, 4, 0.8);
+    font-size: large;
+    padding: 15px;
+    color: white;
+    transition: 100ms;
+}
+
+.submitButton button:disabled,
+.submitButton button:disabled:hover {
+    background-color: rgba(84, 40, 40, 0.8);
+    border: solid 1px rgba(52, 4, 4, 0.8);
+}
+
+.submitButton button:hover {
+    background-color: rgba(96, 6, 6, 0.8);
+    border: solid 1px white;
+}
+
+.submitButton .alternateOption {
+    text-align: center;
+    display: block;
+}
+
+.submitButton a,
+.submitButton a:visited {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}

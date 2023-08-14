@@ -1,31 +1,26 @@
 'use client';
 
-import { AuthContext, useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "@/context/AuthContext";
 import firebase_app from "@/firebase/config";
-import { Friend, getUserData } from "@/firebase/friends";
+import { getUserData } from "@/firebase/friends";
 import createMessage from "@/firebase/messages/create";
 import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import React, { useState, useEffect, FormEvent, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from './conversations.module.css'
 
-const db = getFirestore(firebase_app)
+import type { _Message, _Friend, _AuthContext } from "@/utils/types";
 
-export interface Message {
-    type: 'text' | 'image',
-    content: string,
-    author: string,
-    timestamp: number,
-}
+const db = getFirestore(firebase_app)
 
 export default function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
 
-    const { user, dbUser }: AuthContext = useAuthContext();
+    const { user, dbUser }: _AuthContext = useAuthContext();
 
     const [newMessage, setNewMessage] = useState<string>("");
-    const [messages, setMessages] = useState<Message[]>([])
-    const [friendData, setFriendData] = useState<Friend>({ id: "", displayName: "" });
+    const [messages, setMessages] = useState<_Message[]>([])
+    const [friendData, setFriendData] = useState<_Friend>({ id: "", displayName: "" });
 
     const conversationDocumentId: string = useMemo(() => [params.slug, user?.uid].sort().join("-"), []);
 
@@ -35,7 +30,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         setNewMessage("");
     }
 
-    function checkMessageType(message: DocumentData): message is Message {
+    function checkMessageType(message: DocumentData): message is _Message {
         return message.type === 'text' || message.type === 'image';
     }
 
@@ -49,12 +44,12 @@ export default function Page({ params }: { params: { slug: string } }) {
             setFriendData({ id: friend.id, displayName: friend.displayName || friend.username });
         }
         init();
-    }, [])
+    }, [user])
 
     useEffect(() => {
         const messagesQuery = query(collection(db, `conversations/${conversationDocumentId}/messages`), orderBy("timestamp", "asc"), limit(100));
         onSnapshot(messagesQuery, (doc) => {
-            let tmpMessages: Message[] = [];
+            let tmpMessages: _Message[] = [];
             if (doc.docs.length == 0) return;
             doc.docs.map((msg: QueryDocumentSnapshot<DocumentData, DocumentData>) => {
                 const documentData = msg.data();
@@ -75,7 +70,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     return (
         <div className={styles.container}>
             <div className={styles.chatbox}>
-                {messages.map((message: Message, index: number) => {
+                {messages.map((message: _Message, index: number) => {
                     return (
                         <div key={index}>
                             {message.author === params.slug && <p>{friendData?.displayName}</p>}
