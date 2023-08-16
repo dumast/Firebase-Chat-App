@@ -70,8 +70,31 @@ input {
   color: var(--white-color);
   transition: var(--transition-time);
 }
+
 input:focus {
   border: solid 1px white
+}
+
+.loader {
+  justify-content: center;
+}
+
+.loader svg {
+  max-width: 30px;
+  animation-name: loader;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
 }
 
 .main {
