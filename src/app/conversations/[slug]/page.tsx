@@ -50,8 +50,8 @@ export default function Page({ params }: { params: { slug: string } }) {
     }, [friendData])
 
     useEffect(() => {
-        var invisibleRegexp = /U+200E|U+200F/g
-        setNewMessage(value => value.replaceAll(invisibleRegexp, ""))
+        var invisibleRegex = /\u200E|\u200F/g
+        setNewMessage(value => value.replaceAll(invisibleRegex, ""))
     }, [newMessage])
 
     useEffect(() => {
