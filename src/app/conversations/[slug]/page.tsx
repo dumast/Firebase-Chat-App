@@ -1,10 +1,8 @@
 'use client';
 
 import { useAuthContext } from "@/context/AuthContext";
-import firebase_app from "@/firebase/config";
 import { getUserData } from "@/firebase/friends";
 import { createMessage, getMessages } from "@/firebase/messages";
-import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import React, { useState, useEffect, FormEvent, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from './conversations.module.css'
@@ -13,8 +11,6 @@ import type { _Message, _Friend, _AuthContext, _CurrentPageContext } from "@/uti
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useCurrentPageContext } from "@/context/CurrentPageContext";
-
-const db = getFirestore(firebase_app)
 
 export default function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
@@ -31,7 +27,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     async function handleForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if(newMessage.replaceAll(" ", "")==="") return;
+        if (newMessage.replaceAll(" ", "") === "") return;
         setNewMessage("");
         const { result, error } = await createMessage(newMessage, conversationDocumentId, user!.uid);
     }
@@ -52,6 +48,11 @@ export default function Page({ params }: { params: { slug: string } }) {
         if (!friendData.displayName) return;
         setTitle(friendData.displayName);
     }, [friendData])
+
+    useEffect(() => {
+        var invisibleRegexp = /U+200E|U+200F/g
+        setNewMessage(value => value.replaceAll(invisibleRegexp, ""))
+    }, [newMessage])
 
     useEffect(() => {
         getMessages(conversationDocumentId, setMessages)
