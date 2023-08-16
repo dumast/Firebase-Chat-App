@@ -16,7 +16,9 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <AuthContextProvider>
           <NavBar />
-          {children}
+          <div className="main">
+            {children}
+          </div>
         </AuthContextProvider>
       </body>
     </html>

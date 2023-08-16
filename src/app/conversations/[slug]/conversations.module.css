@@ -1,3 +1,81 @@
 .container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 50px);
+}
+
+.chatbox {
     flex-grow: 1;
+    height: calc(100vh - 50px - 43px - 30px);
+    overflow-y: auto;
+    width: 100vw;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.message p {
+    display: inline;
+}
+
+
+.message p {
+    background-color: var(--widget-background-color);
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 30px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.message .avatar {
+    border-radius: 100%;
+}
+
+.right {
+    flex-direction: row-reverse;
+}
+
+.right p {
+    border: none;
+    background: none;
+    outline: none;
+    color: black;
+    mix-blend-mode: screen;
+    position: relative;
+}
+
+.right p::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: var(--white-color);
+    border-radius: 30px;
+    content: '';
+    mix-blend-mode: color-burn;
+}
+
+.textbar {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    padding: 30px;
+}
+
+.textbar input {
+    flex-grow: 1;
+    height: 43px;
+}
+
+.submitButton {
+    width: clamp(50px, 10%, 50px);
 }

@@ -5,6 +5,8 @@ import { getFriends } from "@/firebase/friends";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import styles from '@/app/friends/style.module.css';
+
 import type { _AuthContext, _Friend } from "@/utils/types";
 
 export default function FriendList() {
@@ -20,10 +22,11 @@ export default function FriendList() {
         init();
     }, []);
 
-    return (<div>
+    return (<div className={styles.friendContainer}>
+        <h2>Conversations</h2>
         {friends.map((friend: _Friend, index: number) => {
             return (
-                <div key={index}><Link href={`/conversations/${friend.id}`}>{friend.displayName}</Link></div>
+                <Link href={`/conversations/${friend.id}`}><button className={styles.friendButton}>{friend.displayName}</button></Link>
             )
         })}
     </div>)

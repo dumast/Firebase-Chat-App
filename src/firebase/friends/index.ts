@@ -191,7 +191,7 @@ export async function removeFriend(uid: string, friendUid: string) {
     }
 }
 
-export async function removeFriendRequest(uid: string, friendUid: string) {
+export async function declineFriendRequest(uid: string, friendUid: string) {
     try {
         await updateDoc(doc(db, "users", uid), {
             friendRequests: arrayRemove(friendUid)

@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import styles from './conversations.module.css'
 
 import type { _Message, _Friend, _AuthContext } from "@/utils/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const db = getFirestore(firebase_app)
 
@@ -73,9 +75,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className={styles.chatbox}>
                 {messages.map((message: _Message, index: number) => {
                     return (
-                        <div key={index}>
-                            {message.author === params.slug && <p>{friendData?.displayName}</p>}
-                            {message.author === user!.uid && <p>{dbUser?.displayName || dbUser?.username}</p>}
+                        <div className={`${styles.message} ${message.author === user!.uid ? styles.right : null}`}
+                            key={index}>
+                            {message.author === params.slug && <p className={styles.avatar}>{friendData?.displayName.slice(0, 2).toUpperCase()}</p>}
                             <p>{message.content}</p>
                         </div>
                     )
@@ -83,11 +85,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <div ref={messagesEndRef} />
             </div>
             <form className={styles.textbar} onSubmit={handleForm}>
-                <label htmlFor="message">
-                    <p>Message</p>
-                    <input className={styles.textbarInput} placeholder={`Message ${friendData.displayName}`} onChange={(e) => setNewMessage(e.target.value)} value={newMessage} />
-                </label>
-                <button hidden type="submit" disabled={newMessage === ""}>Send</button>
+                <input className={styles.textbarInput} placeholder={`Message ${friendData.displayName}`} onChange={(e) => setNewMessage(e.target.value)} value={newMessage} />
+                <button className={styles.submitButton} type="submit" disabled={newMessage === ""}><FontAwesomeIcon icon={faPaperPlane} /></button>
             </form>
         </div>
     )

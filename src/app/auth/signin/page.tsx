@@ -69,7 +69,7 @@ function Page() {
         }
     }, [email, password])
     return (
-        <div className={styles.container}>
+        <div className="justifyCenter">
             <div className={styles.authBox}>
                 <h1 className={styles.title}>Sign in</h1>
                 <form className={styles.form} onSubmit={handleForm}>
@@ -92,7 +92,7 @@ function Page() {
                     </div>
                 </form>
             </div>
-        </div>);
+        </div >);
 }
 
 export default Page;

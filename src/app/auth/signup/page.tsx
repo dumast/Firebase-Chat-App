@@ -79,7 +79,7 @@ function Page() {
         return router.push("/")
     }
 
-    return (<div className={styles.container}>
+    return (
         <div className={styles.authBox}>
             <h1 className={styles.title}>Sign up</h1>
             <form className={styles.form} onSubmit={handleForm}>
@@ -107,8 +107,7 @@ function Page() {
                     <div className={styles.alternateOption}><Link href="/auth/signin">Already have an account? Sign in</Link></div>
                 </div>
             </form>
-        </div >
-    </div >);
+        </div >);
 }
 
 export default Page;

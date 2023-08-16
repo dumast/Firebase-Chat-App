@@ -1,0 +1,55 @@
+.friendContainer {
+    background-color: var(--widget-background-color);
+    position: relative;
+    border: 3px solid var(--input-color);
+    border-radius: 10px;
+    width: clamp(250px, 90vw, 700px);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding: 40px;
+
+    box-shadow: var(--drop-shadow);
+}
+
+.friendContainer h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.friendContainer .buttonContainer,
+.friendContainer .friendButton {
+    width: 100%;
+    margin-bottom: 3px;
+    font-size: large;
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.friendContainer .buttonContainer {
+    border: solid 1px var(--button-color);
+    background-color: var(--button-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+.friendContainer .buttonContainer button {
+    width: 30px;
+    border: none;
+    background: none
+}
+
+.friendContainer .buttonContainer button svg {
+    transition: 100ms;
+}
+
+.friendContainer .buttonContainer .trashContainer:hover svg {
+    color: red;
+}
+
+.friendContainer .buttonContainer .checkContainer:hover svg {
+    color: green;
+}
+
+.friendContainer .friendButton {
+    display: block;
+}

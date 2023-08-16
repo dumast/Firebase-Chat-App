@@ -3,9 +3,13 @@
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect, FormEvent } from "react";
-import { getFriends, getFriendRequests, getSentFriendRequests, sendFriendRequest, acceptFriendRequest, removeFriend, removeSentFriendRequest } from "@/firebase/friends";
+import { getFriends, getFriendRequests, getSentFriendRequests, sendFriendRequest, acceptFriendRequest, removeFriend, removeSentFriendRequest, declineFriendRequest } from "@/firebase/friends";
+import styles from './style.module.css';
+import authStyles from '@/app/auth/auth.module.css';
 
 import type { _AuthContext, _Friend, _Res } from "@/utils/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Page() {
     const router = useRouter();
@@ -60,6 +64,11 @@ export default function Page() {
         }
     }
 
+    async function handleDeclineFriendRequest(friendDelete: _Friend) {
+        await declineFriendRequest(user!.uid, friendDelete.id);
+        setFriendRequests(friendRequests.filter((friendRequest) => friendRequest.id !== friendDelete.id));
+    }
+
     useEffect(() => {
         if (user === null || dbUser === null) return router.push("/");
         async function init() {
@@ -88,43 +97,53 @@ export default function Page() {
 
     return (
         <div>
-            <form onSubmit={(e) => handleSendFriendRequest(e)}>
-                <label htmlFor="addFriend">
-                    <p>Add Friend</p>
+            <div className={styles.friendContainer}>
+                <h2>Manage Friends</h2>
+                {friends.map((friend: _Friend, index: number) => {
+                    return (
+                        <div className={styles.buttonContainer} key={index}>
+                            <p>{friend.displayName}</p>
+                            <button className={styles.trashContainer} onClick={() => handleRemoveFriend(friend)}><FontAwesomeIcon icon={faTrash} /></button>
+                        </div>
+                    )
+                })}
+            </div>
+            <form className={styles.friendContainer} onSubmit={(e) => handleSendFriendRequest(e)}>
+                <div className={authStyles.inputBar}>
+                    <label htmlFor="addFriend"><h2>Add Friend</h2></label>
                     <input onChange={(e) => { friendRequestMessage != "" && setFriendRequestMessage(""); setNewFriendUserName(e.target.value) }} value={newFriendUserName} required id="addFriend" name="addFriend" />
-                </label>
-                {friendRequestMessage != "" && friendRequestMessage}
-                <button type="submit" disabled={newFriendUserName === ""}>Send Friend Request</button>
+                    {friendRequestMessage != "" && friendRequestMessage}
+                </div>
+                <div className={authStyles.submitButton}>
+                    <button type="submit" disabled={newFriendUserName === ""}>Send Friend Request</button>
+                </div>
             </form>
-            <h2>Friend Requests</h2>
-            {friendRequests.map((friend: _Friend, index: number) => {
-                return (
-                    <div key={index}>
-                        <p>{friend.displayName}</p>
-                        <button onClick={() => handleAcceptFriendRequest(friend)}>Accept Friend Request</button>
-                    </div>
-                )
-            })}
-            {acceptFriendMessage}
-            <h2>Sent Friend Requests</h2>
-            {sentFriendRequests.map((friend: _Friend, index: number) => {
-                return (
-                    <div key={index}>
-                        <p>{friend.displayName}</p>
-                        <button onClick={() => handleRemoveSentFriendRequest(friend)}>X</button>
-                    </div>
-                )
-            })}
-            <h2>Manage Friends</h2>
-            {friends.map((friend: _Friend, index: number) => {
-                console.log("FRIENDS: ", friend)
-                return (
-                    <div key={index}>
-                        <p>{friend.displayName}</p>
-                        <button onClick={() => handleRemoveFriend(friend)}>X</button>
-                    </div>
-                )
-            })}
+            <div className={styles.friendContainer}>
+                <h2>Friend Requests</h2>
+                {friendRequests.map((friend: _Friend, index: number) => {
+                    return (
+                        <div className={styles.buttonContainer} key={index}>
+                            <p>{friend.displayName}</p>
+                            <div>
+                                <button className={styles.checkContainer} onClick={() => handleAcceptFriendRequest(friend)}><FontAwesomeIcon icon={faSquareCheck} /></button>
+                                <button className={styles.trashContainer} onClick={() => handleDeclineFriendRequest(friend)}><FontAwesomeIcon icon={faTrash} /></button>
+                            </div>
+                        </div>
+                    )
+                })}
+                {acceptFriendMessage}
+            </div>
+            <div className={styles.friendContainer}>
+                <h2>Sent Friend Requests</h2>
+                {sentFriendRequests.map((friend: _Friend, index: number) => {
+                    return (
+                        <div className={styles.buttonContainer} key={index}>
+                            <p>{friend.displayName}</p>
+                            <button className={styles.trashContainer} onClick={() => handleRemoveSentFriendRequest(friend)}><FontAwesomeIcon icon={faTrash} /></button>
+                        </div>
+                    )
+                })}
+            </div>
         </div>
     )
 } 

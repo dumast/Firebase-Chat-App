@@ -1,19 +1,14 @@
-.container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    place-items: center;
-}
-
 .authBox {
     background-color: var(--widget-background-color);
-    filter: blur(10);
     position: relative;
     border: 3px solid var(--input-color);
     border-radius: 25px;
     width: clamp(250px, 90vw, 700px);
     padding: 40px;
+    box-shadow: var(--drop);
+
+    margin-top: 50vh;
+    transform: translateY(-50%);
 }
 
 .title {
@@ -43,23 +38,10 @@
     padding-bottom: 1px;
 }
 
-.inputBar input {
-    outline: none;
-    padding: 10px;
-    font-size: large;
-    border: solid 1px var(--input-color);
-    background-color: var(--input-color);
-    color: var(--white-color);
-    transition: 100ms;
-}
-
 .inputBar input:-webkit-autofill {
     transition: background-color 600000s 0s, color 600000s 0s;
 }
 
-.inputBar input:focus {
-    border: solid 1px white
-}
 
 .inputBar .passwordToggle {
     display: inline-block;
