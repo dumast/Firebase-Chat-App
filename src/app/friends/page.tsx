@@ -75,29 +75,10 @@ export default function Page() {
     useEffect(() => {
         if (user === null || dbUser === null) return router.push("/");
         if (setTitle != null) setTitle("Friends");
-        async function init() {
-            const friends = await getFriends(user!.uid);
-            setFriends(friends.sort());
-        }
-        init();
+        getFriends(user!.uid, setFriends);
+        getFriendRequests(user!.uid, setFriendRequests);
+        getSentFriendRequests(user!.uid, setSentFriendRequests);
     }, []);
-
-    useEffect(() => {
-        async function init() {
-            const friendRequests = await getFriendRequests(user!.uid);
-            setFriendRequests(friendRequests.sort());
-        }
-        init();
-    }, []);
-
-    useEffect(() => {
-        async function init() {
-            const sentFriendRequests = await getSentFriendRequests(user!.uid);
-            setSentFriendRequests(sentFriendRequests.sort());
-        }
-        init();
-    }, []);
-
 
     return (
         <div>

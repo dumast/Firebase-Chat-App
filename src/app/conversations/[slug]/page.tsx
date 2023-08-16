@@ -3,7 +3,7 @@
 import { useAuthContext } from "@/context/AuthContext";
 import firebase_app from "@/firebase/config";
 import { getUserData } from "@/firebase/friends";
-import createMessage from "@/firebase/messages/create";
+import { createMessage, getMessages } from "@/firebase/messages";
 import { DocumentData, QueryDocumentSnapshot, collection, getFirestore, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import React, { useState, useEffect, FormEvent, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -35,11 +35,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         const { result, error } = await createMessage(newMessage, conversationDocumentId, user!.uid);
     }
 
-    function checkMessageType(message: DocumentData): message is _Message {
-        return message.type === 'text' || message.type === 'image';
-    }
-
-
     useEffect(() => {
         if (user === null || dbUser === null || !dbUser?.friends?.includes(params.slug)) return router.push("/");
         async function init() {
@@ -58,18 +53,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     }, [friendData])
 
     useEffect(() => {
-        const messagesQuery = query(collection(db, `conversations/${conversationDocumentId}/messages`), orderBy("timestamp", "asc"), limit(100));
-        onSnapshot(messagesQuery, (doc) => {
-            let tmpMessages: _Message[] = [];
-            if (doc.docs.length == 0) return;
-            doc.docs.map((msg: QueryDocumentSnapshot<DocumentData, DocumentData>) => {
-                const documentData = msg.data();
-                if (checkMessageType(documentData)) {
-                    tmpMessages.push(documentData);
-                }
-            })
-            setMessages(tmpMessages);
-        });
+        getMessages(conversationDocumentId, setMessages)
     }, [])
 
     const messagesEndRef = useRef<HTMLDivElement>(null)

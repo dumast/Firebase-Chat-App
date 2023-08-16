@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
+import { Unsubscribe, arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import firebase_app from "../config";
 import { authMessages, friendsMessages, globalMessages } from "@/utils/messages";
 
@@ -27,57 +27,53 @@ export async function getUserData(id: string) {
     }
 }
 
-async function getFriendData(uid: string, data: string): Promise<_Friend[]> {
-    try {
-        const userData = await getUserData(uid);
-        if (userData == null) return []
-        if (userData[data] === undefined) return [];
-        let friends: _Friend[] = [];
-        for (let i = 0; i < userData[data].length; i++) {
-            let friendDisplayName: string;
-            const friendData = await getUserData(userData[data][i]);
-            if (friendData == null) return [];
-            if (friendData.displayName) {
-                friendDisplayName = friendData.displayName;
-            } else {
-                friendDisplayName = friendData.username;
-            }
-            friends.push({ id: userData[data][i], displayName: friendDisplayName })
-        }
-        return friends;
-    } catch (e) {
-        return []
-    }
+async function getFriendData(uid: string, data: string, setValue: React.Dispatch<React.SetStateAction<_Friend[]>>) {
+    const userQuery = query(collection(db, "users"), where(documentId(), '==', uid));
+    return onSnapshot(userQuery, (doc) => {
+        if (doc.docs.length == 0) return null;
+        const userData = doc.docs[0].data()
+        if (userData[data] == null || userData[data].length === 0) return null;
+        const friendQuery = query(collection(db, "users"), where(documentId(), "in", userData[data]));
+        onSnapshot(friendQuery, (doc) => {
+            let friends: _Friend[] = [];
+            if (doc.docs.length == 0) return null;
+            doc.docs.map((friendDoc) => {
+                const friendDisplayName = friendDoc.data().displayName || friendDoc.data().username
+                friends.push({ id: friendDoc.id, displayName: friendDisplayName })
+            })
+            setValue(friends);
+        })
+    })
 }
 
-export async function getFriends(uid: string): Promise<_Friend[]> {
-    return getFriendData(uid, 'friends');
+export function getFriends(uid: string, setValue: React.Dispatch<React.SetStateAction<_Friend[]>>): Promise<Unsubscribe> {
+    return getFriendData(uid, 'friends', setValue);
 }
 
-export async function getFriendRequests(uid: string): Promise<_Friend[]> {
-    return getFriendData(uid, 'friendRequests');
+export function getFriendRequests(uid: string, setValue: React.Dispatch<React.SetStateAction<_Friend[]>>): Promise<Unsubscribe> {
+    return getFriendData(uid, 'friendRequests', setValue);
 }
 
-export async function getSentFriendRequests(uid: string): Promise<_Friend[]> {
-    return getFriendData(uid, 'sentFriendRequests');
+export function getSentFriendRequests(uid: string, setValue: React.Dispatch<React.SetStateAction<_Friend[]>>): Promise<Unsubscribe> {
+    return getFriendData(uid, 'sentFriendRequests', setValue);
 }
 
 export async function sendFriendRequest(uid: string, friendUserName: string): Promise<_Res> {
     let res: _Res;
     try {
-        const friendId = await userId(friendUserName);
-        if (friendId === null) {
-            res = {
-                status: 404,
-                message: friendsMessages.userNotFound
-            }
-            return res;
-        }
         const userData = await getUserData(uid);
         if (userData === null) {
             res = {
                 status: 401,
                 message: authMessages.userNotLoggedIn
+            }
+            return res;
+        }
+        const friendId = await userId(friendUserName);
+        if (friendId === null) {
+            res = {
+                status: 404,
+                message: friendsMessages.userNotFound
             }
             return res;
         }

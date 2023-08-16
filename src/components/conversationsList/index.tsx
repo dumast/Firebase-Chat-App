@@ -15,11 +15,7 @@ export default function FriendList() {
     const [friends, setFriends] = useState<_Friend[]>([]);
 
     useEffect(() => {
-        async function init() {
-            const friends = await getFriends(user!.uid);
-            setFriends(friends.sort());
-        }
-        init();
+        getFriends(user!.uid, setFriends);
     }, []);
 
     return (<div className={styles.friendContainer}>
