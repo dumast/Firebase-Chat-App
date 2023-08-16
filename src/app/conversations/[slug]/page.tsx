@@ -31,6 +31,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     async function handleForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        if(newMessage.replaceAll(" ", "")==="") return;
         setNewMessage("");
         const { result, error } = await createMessage(newMessage, conversationDocumentId, user!.uid);
     }
