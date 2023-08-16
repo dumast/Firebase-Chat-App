@@ -26,7 +26,7 @@ export default function FriendList() {
         <h2>Conversations</h2>
         {friends.map((friend: _Friend, index: number) => {
             return (
-                <Link href={`/conversations/${friend.id}`}><button className={styles.friendButton}>{friend.displayName}</button></Link>
+                <Link key={index} href={`/conversations/${friend.id}`}><button className={styles.friendButton}>{friend.displayName}</button></Link>
             )
         })}
     </div>)
