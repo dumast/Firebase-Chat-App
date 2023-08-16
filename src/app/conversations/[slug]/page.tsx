@@ -52,6 +52,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     useEffect(() => {
         var invisibleRegex = /\u200E|\u200F/g
         setNewMessage(value => value.replaceAll(invisibleRegex, ""))
+        if(newMessage.length > 300) setNewMessage((value) => value.substring(0, 300))
     }, [newMessage])
 
     useEffect(() => {
