@@ -15,6 +15,7 @@ export default function Page() {
     const [newFriendUserName, setNewFriendUserName] = useState<string>("");
     const [friendRequestMessage, setFriendRequestMessage] = useState<string>("");
     const [acceptFriendMessage, setAcceptFriendMessage] = useState<string>("");
+
     const [friends, setFriends] = useState<_Friend[]>([]);
     const [friendRequests, setFriendRequests] = useState<_Friend[]>([]);
     const [sentFriendRequests, setSentFriendRequests] = useState<_Friend[]>([]);

@@ -2,6 +2,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import signOut from "@/firebase/auth/signout";
 import { useRouter } from 'next/navigation';
+import styles from './navbar.module.css';
 
 import type { _AuthContext } from "@/utils/types";
 
@@ -14,14 +15,14 @@ export default function NavBar() {
         return (<></>)
     }
 
-    return (<header>
-        <nav>
+    return (
+        <header className={styles.container}>
             <p>{dbUser.displayName ? dbUser.displayName : dbUser.username}</p>
-            <ul>
-                <li><Link href="/">Dashboard</Link></li>
-                <li><Link href="/friends">Friends</Link></li>
-                <a onClick={() => { signOut(); router.push("/") }}>Sign Out</a>
-            </ul>
-        </nav>
-    </header>)
+            <nav className={styles.nav}>
+                <Link href="/"><button>Dashboard</button></Link>
+                <Link href="/friends"><button>Friends</button></Link>
+                <a onClick={() => { signOut(); router.push("/") }}><button>Sign Out</button></a>
+            </nav>
+        </header>
+    )
 }

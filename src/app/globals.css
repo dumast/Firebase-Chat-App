@@ -1,7 +1,43 @@
+:root {
+  --widget-background-color: rgba(110, 3, 3, 0.199);
+  --input-color: rgb(70, 4, 4, 0.80);
+  --button-color: rgba(52, 4, 4, 0.8);
+  --button-hover-color: rgba(96, 6, 6, 0.8);
+  --button-disabled-color: rgba(84, 40, 40, 0.8);
+
+  --white-color: white;
+}
+
+button {
+  outline: none;
+  border: solid 1px var(--button-color);
+  background-color: var(--button-color);
+  color: white;
+  border-radius: 3px;
+  transition: 100ms;
+}
+
+button:disabled,
+button:disabled:hover {
+  background-color: var(--button-disabled-color);
+  border: solid 1px var(--button-color);
+}
+
+button:hover {
+  background-color: var(--button-hover-color);
+  border: solid 1px var(--white-color);
+}
+
+a, a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  color: inherit;
 }
 
 html {
@@ -17,4 +53,5 @@ body {
   background-repeat: no-repeat;
   height: 100vh;
   overflow-y: auto;
+  color: var(--white-color);
 }

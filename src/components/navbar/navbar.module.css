@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    background-color: var(--widget-background-color);
+    min-height: 50px;
+    place-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.nav button {
+    padding: 10px;
+}

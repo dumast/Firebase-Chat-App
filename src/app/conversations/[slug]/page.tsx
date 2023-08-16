@@ -19,6 +19,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const { user, dbUser }: _AuthContext = useAuthContext();
 
     const [newMessage, setNewMessage] = useState<string>("");
+
     const [messages, setMessages] = useState<_Message[]>([])
     const [friendData, setFriendData] = useState<_Friend>({ id: "", displayName: "" });
 
@@ -26,8 +27,8 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     async function handleForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const { result, error } = await createMessage(newMessage, conversationDocumentId, user!.uid);
         setNewMessage("");
+        const { result, error } = await createMessage(newMessage, conversationDocumentId, user!.uid);
     }
 
     function checkMessageType(message: DocumentData): message is _Message {
