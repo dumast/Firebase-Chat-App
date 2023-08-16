@@ -7,9 +7,15 @@ import styles from '../auth.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { authMessages } from '@/utils/messages';
+import { useCurrentPageContext } from "@/context/CurrentPageContext";
 
+import type { _CurrentPageContext } from "@/utils/types";
 
 function Page() {
+    const router = useRouter()
+
+    const { setTitle }: _CurrentPageContext = useCurrentPageContext();
+
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -18,8 +24,6 @@ function Page() {
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
     const [message, setMessage] = useState<string>('');
-
-    const router = useRouter()
 
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
@@ -78,6 +82,10 @@ function Page() {
 
         return router.push("/")
     }
+
+    useEffect(() => {
+        if(setTitle != null) setTitle("Sign Up");
+    }, [])
 
     return (
         <div className={styles.authBox}>

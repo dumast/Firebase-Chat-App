@@ -7,9 +7,13 @@ import styles from '../auth.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { authMessages, globalMessages } from '@/utils/messages';
+import { _CurrentPageContext } from "@/utils/types";
+import { useCurrentPageContext } from "@/context/CurrentPageContext";
 
 function Page() {
     const router = useRouter();
+
+    const { setTitle }: _CurrentPageContext = useCurrentPageContext();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -68,6 +72,11 @@ function Page() {
             return;
         }
     }, [email, password])
+
+    useEffect(() => {
+        if(setTitle != null) setTitle("Sign In");
+    }, [])
+    
     return (
         <div className="justifyCenter">
             <div className={styles.authBox}>

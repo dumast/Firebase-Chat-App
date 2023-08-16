@@ -3,12 +3,27 @@
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-
     background-color: var(--widget-background-color);
     min-height: 50px;
     place-items: center;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.container > * {
+    flex: 1 1 0px;
+}
+
+.container >*:nth-child(1) {
+    text-align: left;
+}
+
+.container >*:nth-child(2) {
+    text-align: center;
+}
+
+.container >*:nth-child(3) {
+    justify-content: flex-end;
 }
 
 .nav {

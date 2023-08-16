@@ -1,4 +1,5 @@
 import type {User} from 'firebase/auth';
+import { Dispatch, SetStateAction } from 'react';
 
 // Utils
 
@@ -13,6 +14,11 @@ export interface _Res {
 export interface _AuthContext {
     user: User | null,
     dbUser: _DbUser | null,
+}
+
+export interface _CurrentPageContext {
+    title: string,
+    setTitle: Dispatch<SetStateAction<string>> | null,
 }
 
 // Users

@@ -7,7 +7,9 @@
 
   --white-color: white;
 
-  --drop-shadow: 0 3px rgba(0, 0, 0, 0.375)
+  --drop-shadow: 0 3px rgba(0, 0, 0, 0.375);
+
+  --transition-time: 50ms;
 }
 
 * {
@@ -39,7 +41,7 @@ button {
   border: solid 1px var(--button-color);
   background-color: var(--button-color);
   border-radius: 3px;
-  transition: 100ms;
+  transition: var(--transition-time);
 }
 
 button:disabled,
@@ -66,7 +68,7 @@ input {
   border: solid 1px var(--input-color);
   background-color: var(--input-color);
   color: var(--white-color);
-  transition: 100ms;
+  transition: var(--transition-time);
 }
 input:focus {
   border: solid 1px white

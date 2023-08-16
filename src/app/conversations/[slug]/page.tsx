@@ -9,9 +9,10 @@ import React, { useState, useEffect, FormEvent, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from './conversations.module.css'
 
-import type { _Message, _Friend, _AuthContext } from "@/utils/types";
+import type { _Message, _Friend, _AuthContext, _CurrentPageContext } from "@/utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { useCurrentPageContext } from "@/context/CurrentPageContext";
 
 const db = getFirestore(firebase_app)
 
@@ -19,6 +20,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
 
     const { user, dbUser }: _AuthContext = useAuthContext();
+    const { setTitle }: _CurrentPageContext = useCurrentPageContext();
 
     const [newMessage, setNewMessage] = useState<string>("");
 
@@ -48,6 +50,12 @@ export default function Page({ params }: { params: { slug: string } }) {
         }
         init();
     }, [user])
+
+    useEffect(() => {
+        if (setTitle == null) return;
+        if (!friendData.displayName) return;
+        setTitle(friendData.displayName);
+    }, [friendData])
 
     useEffect(() => {
         const messagesQuery = query(collection(db, `conversations/${conversationDocumentId}/messages`), orderBy("timestamp", "asc"), limit(100));

@@ -7,14 +7,17 @@ import { getFriends, getFriendRequests, getSentFriendRequests, sendFriendRequest
 import styles from './style.module.css';
 import authStyles from '@/app/auth/auth.module.css';
 
-import type { _AuthContext, _Friend, _Res } from "@/utils/types";
+import type { _AuthContext, _CurrentPageContext, _Friend, _Res } from "@/utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useCurrentPageContext } from "@/context/CurrentPageContext";
 
 export default function Page() {
     const router = useRouter();
 
     const { user, dbUser }: _AuthContext = useAuthContext();
+    const { setTitle }: _CurrentPageContext = useCurrentPageContext();
+
 
     const [newFriendUserName, setNewFriendUserName] = useState<string>("");
     const [friendRequestMessage, setFriendRequestMessage] = useState<string>("");
@@ -71,6 +74,7 @@ export default function Page() {
 
     useEffect(() => {
         if (user === null || dbUser === null) return router.push("/");
+        if (setTitle != null) setTitle("Friends");
         async function init() {
             const friends = await getFriends(user!.uid);
             setFriends(friends.sort());

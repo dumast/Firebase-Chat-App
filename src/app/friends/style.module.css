@@ -39,7 +39,7 @@
 }
 
 .friendContainer .buttonContainer button svg {
-    transition: 100ms;
+    transition: var(--transition-time);
 }
 
 .friendContainer .buttonContainer .trashContainer:hover svg {

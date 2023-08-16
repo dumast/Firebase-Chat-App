@@ -4,10 +4,12 @@ import signOut from "@/firebase/auth/signout";
 import { useRouter } from 'next/navigation';
 import styles from './navbar.module.css';
 
-import type { _AuthContext } from "@/utils/types";
+import type { _AuthContext, _CurrentPageContext } from "@/utils/types";
+import { useCurrentPageContext } from "@/context/CurrentPageContext";
 
 export default function NavBar() {
     const { user, dbUser }: _AuthContext = useAuthContext();
+    const { title }: _CurrentPageContext = useCurrentPageContext();
 
     const router = useRouter();
 
@@ -18,6 +20,7 @@ export default function NavBar() {
     return (
         <header className={styles.container}>
             <p>{dbUser.displayName ? dbUser.displayName : dbUser.username}</p>
+            <p>{title}</p>
             <nav className={styles.nav}>
                 <Link href="/"><button>Dashboard</button></Link>
                 <Link href="/friends"><button>Friends</button></Link>
