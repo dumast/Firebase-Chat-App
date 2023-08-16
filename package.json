@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tauri": "tauri"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -25,5 +26,8 @@
     "react-dom": "18.2.0",
     "typescript": "5.1.6",
     "unique-names-generator": "^4.7.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.4.0"
   }
 }
