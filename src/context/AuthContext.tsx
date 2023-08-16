@@ -49,7 +49,9 @@ export const AuthContextProvider = ({
                             displayName: dbUserData.displayName || null,
                             username: dbUserData.username,
                             email: dbUserData.email,
-                            friends: dbUserData.friends
+                            friends: dbUserData.friends,
+                            friendRequests: dbUserData.friendRequests,
+                            sentFriendRequests: dbUserData.sentFriendRequests,
                         })
                     }
                     setDbUserLoading(false);

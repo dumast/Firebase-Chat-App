@@ -40,7 +40,7 @@ export default function Page() {
     async function handleSendFriendRequest(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (newFriendUserName === "") return setFriendRequestMessage("Please enter a valid username")
-        const res: _Res = await sendFriendRequest(user!.uid, newFriendUserName)
+        const res: _Res = await sendFriendRequest(user!.uid, dbUser, newFriendUserName)
         switch (res.status) {
             case 200:
                 setSentFriendRequests([...sentFriendRequests, { id: res.content!.id, displayName: newFriendUserName }].sort());

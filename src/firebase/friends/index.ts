@@ -2,7 +2,7 @@ import { Unsubscribe, arrayRemove, arrayUnion, collection, doc, documentId, getD
 import firebase_app from "../config";
 import { authMessages, friendsMessages, globalMessages } from "@/utils/messages";
 
-import type { _Res, _Friend } from "@/utils/types";
+import type { _Res, _Friend, _DbUser } from "@/utils/types";
 
 const db = getFirestore(firebase_app)
 
@@ -58,11 +58,10 @@ export function getSentFriendRequests(uid: string, setValue: React.Dispatch<Reac
     return getFriendData(uid, 'sentFriendRequests', setValue);
 }
 
-export async function sendFriendRequest(uid: string, friendUserName: string): Promise<_Res> {
+export async function sendFriendRequest(uid: string, dbUser: _DbUser | null, friendUserName: string): Promise<_Res> {
     let res: _Res;
     try {
-        const userData = await getUserData(uid);
-        if (userData === null) {
+        if (dbUser === null) {
             res = {
                 status: 401,
                 message: authMessages.userNotLoggedIn
@@ -84,21 +83,21 @@ export async function sendFriendRequest(uid: string, friendUserName: string): Pr
             }
             return res;
         }
-        if (userData.friends !== undefined && userData.friends.includes(friendId)) {
+        if (dbUser.friends !== undefined && dbUser.friends.includes(friendId)) {
             res = {
                 status: 400,
                 message: friendsMessages.userAlreadyFriend
             }
             return res;
         }
-        if (userData.sentFriendRequests !== undefined && userData.sentFriendRequests.includes(friendId)) {
+        if (dbUser.sentFriendRequests !== undefined && dbUser.sentFriendRequests.includes(friendId)) {
             res = {
                 status: 400,
                 message: friendsMessages.friendRequestAlreadySent
             }
             return res;
         }
-        if (userData.friendRequests !== undefined && userData.friendRequests.includes(friendId)) {
+        if (dbUser.friendRequests !== undefined && dbUser.friendRequests.includes(friendId)) {
             await acceptFriendRequest(uid, friendId);
             res = {
                 status: 206,
